@@ -20,6 +20,7 @@ class Button : public IButton {
         sf::RectangleShape &getShape(void);
         sf::Text &getText(void);
         stat_e getStat(void) const;
+        void update(const sf::RenderWindow &window);
     protected:
         stat_e _status;
         sf::RectangleShape _shape;
