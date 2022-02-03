@@ -27,7 +27,9 @@ class Button : public IButton {
         sf::Text &getText(void);
         stat_e getStat(void) const;
         void setPosition(sf::Vector2f position);
-        sf::Vector2f getPosition() const;
+        sf::Vector2f getPosition(void) const;
+        void setTextAlign(textAlign_e textAlign);
+        textAlign_e getTextAlign(void) const; 
     protected:
         textAlign_e _textAlign;
         stat_e _status;

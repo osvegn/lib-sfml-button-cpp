@@ -3,7 +3,7 @@
 
 Button::Button()
 {
-    _textAlign = CENTER;
+    _textAlign = LEFT;
     _status = ACTIVE;
     _shape.setOutlineThickness(1);
     _shape.setOutlineColor(sf::Color(100, 100, 255));
@@ -37,7 +37,13 @@ Button &Button::operator=(const Button &b)
 
 void Button::draw(sf::RenderWindow &window) const
 {
+    sf::RectangleShape t;
+
+    t.setFillColor(sf::Color::Green);
+    t.setPosition({_text.getGlobalBounds().left, _text.getGlobalBounds().top});
+    t.setSize({_text.getGlobalBounds().width, _text.getGlobalBounds().height});
     window.draw(_shape);
+    //window.draw(t);
     window.draw(_text);
     if (_font.getInfo().family == "")
         std::cerr << "No font loaded" << std::endl;
@@ -88,13 +94,13 @@ void Button::setPosition(sf::Vector2f position)
     switch (_textAlign)
     {
     case LEFT:
-        _text.setPosition({position.x, position.y + (_shape.getSize().y - _text.getLocalBounds().height) / 2});
+        _text.setPosition({position.x, position.y + (_shape.getSize().y - (_text.getLocalBounds().height + _text.getCharacterSize() / 2)) / 2});
         break;
     case RIGHT:
-        _text.setPosition({_shape.getPosition().x + _shape.getSize().x - _text.getLocalBounds().width, position.y + (_shape.getSize().y - _text.getLocalBounds().height) / 2});
+        _text.setPosition({_shape.getPosition().x + _shape.getSize().x - _text.getLocalBounds().width, position.y + (_shape.getSize().y - (_text.getLocalBounds().height + _text.getCharacterSize() / 2)) / 2});
         break;
     case CENTER:
-        _text.setPosition({_shape.getPosition().x + _shape.getSize().x - _text.getLocalBounds().width - ((_shape.getSize().x - _text.getLocalBounds().width) / 2), position.y + (_shape.getSize().y - _text.getLocalBounds().height) / 2});
+        _text.setPosition({_shape.getPosition().x + _shape.getSize().x - _text.getLocalBounds().width - ((_shape.getSize().x - _text.getLocalBounds().width) / 2), position.y + (_shape.getSize().y - (_text.getLocalBounds().height + _text.getCharacterSize() / 2)) / 2});
         break;
     default:
         break;
@@ -104,6 +110,17 @@ void Button::setPosition(sf::Vector2f position)
 sf::Vector2f Button::getPosition(void) const
 {
     return (_shape.getPosition());
+}
+
+void Button::setTextAlign(Button::textAlign_e textAlign)
+{
+    _textAlign = textAlign;
+    setPosition(getPosition());
+}
+
+Button::textAlign_e Button::getTextAlign(void) const
+{
+    return (_textAlign);
 }
 
 Button::~Button()
