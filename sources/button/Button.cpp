@@ -1,7 +1,9 @@
 #include "Button.hpp"
+#include <iostream>
 
 Button::Button()
 {
+    _textAlign = CENTER;
     _status = ACTIVE;
     _shape.setOutlineThickness(1);
     _shape.setOutlineColor(sf::Color(100, 100, 255));
@@ -37,6 +39,8 @@ void Button::draw(sf::RenderWindow &window) const
 {
     window.draw(_shape);
     window.draw(_text);
+    if (_font.getInfo().family == "")
+        std::cerr << "No font loaded" << std::endl;
 }
 
 sf::RectangleShape &Button::getShape(void)
@@ -75,6 +79,31 @@ void Button::update(const sf::RenderWindow &window)
     } else {
         _status = ACTIVE;
     }
+}
+
+
+void Button::setPosition(sf::Vector2f position)
+{
+    _shape.setPosition(position);
+    switch (_textAlign)
+    {
+    case LEFT:
+        _text.setPosition({position.x, position.y + (_shape.getSize().y - _text.getLocalBounds().height) / 2});
+        break;
+    case RIGHT:
+        _text.setPosition({_shape.getPosition().x + _shape.getSize().x - _text.getLocalBounds().width, position.y + (_shape.getSize().y - _text.getLocalBounds().height) / 2});
+        break;
+    case CENTER:
+        _text.setPosition({_shape.getPosition().x + _shape.getSize().x - _text.getLocalBounds().width - ((_shape.getSize().x - _text.getLocalBounds().width) / 2), position.y + (_shape.getSize().y - _text.getLocalBounds().height) / 2});
+        break;
+    default:
+        break;
+    }
+}
+
+sf::Vector2f Button::getPosition(void) const
+{
+    return (_shape.getPosition());
 }
 
 Button::~Button()
